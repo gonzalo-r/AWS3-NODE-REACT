@@ -1,33 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React from 'react'
+import {useState} from "react"
+import axios from "axios"
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [post, setPost] = useState({
+    title:"",
+    photo: null
+  })
+
+  const handleSubmit = async ()=> {
+    e.preventDefault();
+    const formData = new FormData()
+    formData.append("photo", post.photo)
+    const response =  await axios.post("http://localhost:3000/upload", formData , {
+      headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  })
+  
+  console.log(response)
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div>
+      
+      <form onSubmit={handleSubmit}>
+
+        <input type="text" placeholder='title'
+         onChange={e => setPost({...post, title: e.target.value})}
+         />
+
+        <input type="file" name='photo '
+          onChange={e => setPost({...post, photo: e.target.files[0]})}
+          />
+           <button>
+            Upload
+          </button>
+      </form>
+
+     
+      
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
   )
 }
 
